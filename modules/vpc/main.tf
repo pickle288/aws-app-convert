@@ -1,21 +1,25 @@
-//partie VPC
 module "vpc" {
-    source = "terraform-aws-modules/vpc/aws"
-    version = "6.6.0"
-    name = "vpc-prod"
-    cidr = "10.0.0.0/16"
-    azs             = ["eu-west-3a", "eu-west-3b"]
+  source  = "terraform-aws-modules/vpc/aws"
+  version = "6.6.0"
+ 
+  name = "vpc-prod"
+  cidr = "10.0.0.0/16"
 
-    single_nat_gateway = true #pour éviter d'avoir plusieurs NAT Gateway par az
+  azs             = ["eu-west-1a", "eu-west-1b"]
+  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
+  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
 
-    }
-resource "aws_subnet" "public" {
-  count = 2
-  vpc_id = module.vpc.vpc_id
-  cidr_block = "10.10.3.0/24"
-  availability_zone = element(module.vpc.azs, count.index)
-  map_public_ip_on_launch = true
-  tags = {
-    Name = "public-subnet-${count.index}"
+single_nat_gateway = true
+enable_nat_gateway = true
+
+  enable_dns_hostnames = true
+  enable_dns_support   = true
+  
+  public_subnet_tags = {
+    Name = "sub-public"
+  }
+  
+  private_subnet_tags = {
+    Name = "sub-private"
   }
 }
