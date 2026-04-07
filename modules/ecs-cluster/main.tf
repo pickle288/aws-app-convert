@@ -1,5 +1,5 @@
-resource "aws_ecs_cluster" "foo" {
-  name = "white-hart"
+resource "aws_ecs_cluster" "app-cluster" {
+  name = "app-convert"
 
   setting {
     name  = "containerInsights"

@@ -1,7 +1,7 @@
 resource "aws_alb" "alb-prod" {
     name            = "alb-prod"
     internal        = false
-    security_groups = [aws_security_group.sg-alb]
+    security_groups = [aws_security_group.sg-alb.id]
     subnets         = module.vpc.public_subnets
     
     tags = {
@@ -15,6 +15,7 @@ resource "aws_alb_target_group" "alb-tg-prod" {
     port     = 8080
     protocol = "HTTP"
     vpc_id   = module.vpc.vpc_id
+    target_type = "ip"
 
     health_check {
         path                = "/"
@@ -41,3 +42,17 @@ resource "aws_alb_listener" "alb-listener-prod" {
         target_group_arn = aws_alb_target_group.alb-tg-prod.arn     #permet de faire le lien entre le listener et le target group
     }
 }
+
+#groupes de sécurité alb
+resource "aws_security_group" "sg-alb" {
+    name        = "sg-alb"
+    description = "Security group for ALB"
+    vpc_id      = module.vpc.vpc_id
+
+    ingress {
+        from_port   = 80
+        to_port     = 80
+        protocol    = "tcp"
+        cidr_blocks = ["0.0.0/0"]
+    }
+  }
