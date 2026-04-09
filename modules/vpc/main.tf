@@ -15,6 +15,10 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
   
+  vpc_tags = {
+    Name = "vpc-prod"
+  }
+  
   public_subnet_tags = {
     Name = "sub-public-prod"
   }
