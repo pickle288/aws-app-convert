@@ -1,23 +1,29 @@
-provider "aws" {
-  alias  = "eu_west_3"
-  region = "eu-west-3"
-}
+module "ecr" {
+  source = "terraform-aws-modules/ecr/aws"
 
-resource "aws_ecrpublic_repository" "foo" {
-  provider = aws.eu_west_3
+  repository_name = "app-convert-repository"
 
-  repository_name = "app-convert"
-
-  catalog_data {
-    about_text        = "About Text"
-    architectures     = ["ARM"]
-    description       = "Description"
-    logo_image_blob   = filebase64(image.png)
-    operating_systems = ["Linux"]
-    usage_text        = "Usage Text"
-  }
+  repository_read_write_access_arns = ["arn:aws:iam::012345678901:role/terraform"]
+  repository_lifecycle_policy = jsonencode({       #permet de définir une politique de cycle de vie pour le repository ECR
+    rules = [
+      {
+        rulePriority = 1,
+        description  = "Keep last 30 images",
+        selection = {
+          tagStatus     = "tagged",
+          tagPrefixList = ["v"],
+          countType     = "imageCountMoreThan",
+          countNumber   = 30
+        },
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
 
   tags = {
-    env = "production"
+    Terraform   = "true"
+    Environment = "production"
   }
 }
