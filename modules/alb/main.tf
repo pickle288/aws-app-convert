@@ -3,7 +3,6 @@ resource "aws_alb" "alb-prod" {
     internal        = false
     security_groups = [aws_security_group.sg-alb.id]
     subnets         = var.public_subnets
-    vpc_id          = var.vpc_id
     tags = {
         Name = "alb-prod"
     }

@@ -14,7 +14,7 @@ output "alb_target_group_arn" {
 
 output "listener_arn" {
   description = "ARN du listener de l'ALB"
-  value       = aws_lb_listener.alb-listener-prod.arn
+  value       = aws_alb_listener.alb-listener-prod.arn
   
 }
 
