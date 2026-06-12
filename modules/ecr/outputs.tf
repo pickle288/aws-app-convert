@@ -1,22 +1,22 @@
 output "arn" {
   description = "ARN du repository ECR"
-  value       = aws_ecrpublic_repository.foo.arn
+  value       = module.ecr.repository_arn
   
 }
 
 output "repository_url" {
   description = "URL du repository ECR"
-  value       = aws_ecrpublic_repository.foo.repository_url
+  value       = module.ecr.repository_url
 }
 
 output "repository_name" {
   description = "Nom du repository ECR"
-  value       = aws_ecrpublic_repository.foo.repository_name
+  value       = module.ecr.repository_name
   
 }
 
 output "repositery_id" {
     description = "ID du repository ECR"
-    value       = aws_ecrpublic_repository.foo.repository_id
+    value       = module.ecr.repository_id
   
 }
